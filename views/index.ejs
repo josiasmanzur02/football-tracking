@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Football Tracking</title>
+</head>
+<body>
+    <div class="container">
+    <h1>Choose a League or Team</h1>
+
+    <form action="/" id="form" class="form" method="POST">
+      <select name="league" id="league" class="form-select">
+        <option value="" data-display="Select">Choose League</option> 
+        <option value="4335">Spanish La Liga</option>
+        <option value="4480">UEFA Champions League</option>
+        <option value="4429">FIFA World Cup</option> 
+        <option value="4346">American Major League Soccer</option>
+        <option value="4328">English Premier League</option>
+        <option value="4331">German Bundesliga</option>  
+        <option value="4332">Italian Serie A</option>
+      </select>
+      <select name="team" id="team" class="form-select">
+        <option value="">Choose Team</option>
+        <option value="133739">FC Barcelona</option>
+        <option value="133664">Bayern Munich</option>
+        <option value="137699">Inter Miami</option> 
+        <option value="134509">Argentina</option>
+        <option value="133909">Spain</option>
+      </select>
+      <button type="submit" class="form-submit">Go</button>
+    </form>
+    <section id="cards" class="cards">
+      <% if (locals.data) { %>
+      <article class="card-item">  
+        <h2 class="card-activity">
+          <%= data.activity %>
+        </h2>
+        <div class="card-info"> 
+          <span class="card-type">
+            <%= data.type %>
+          </span>  
+          <span class="card-participants">
+            Participants: <%= data.participants %>
+            <span class="card-number"></span>
+          </span>
+        </div>
+      </article>
+      <% } %>
+
+    </section>
+  </div> 
+  <script>
+    const leagueSelect = document.getElementById('league'); 
+    const teamSelect = document.getElementById('team');
+
+    function handleSelectChange(changed, other) {
+        if (changed.value) {
+        other.disabled = true;
+        other.classList.add('disabled-select');
+        } else {
+        other.disabled = false;
+        other.classList.remove('disabled-select');
+        }
+    }
+
+    leagueSelect.addEventListener('change', () => handleSelectChange(leagueSelect, teamSelect));
+    teamSelect.addEventListener('change', () => handleSelectChange(teamSelect, leagueSelect));
+  </script>
+
+</body>
+</html>
