@@ -1,21 +1,32 @@
 import express from "express";
 import axios from "axios";
+import bodyParser from "body-parser"
 
 const port = 3000;
-const app = express();
+const app = express(); 
 
+app.use(bodyParser.urlencoded({ extended: true}));
 app.use(express.static("public"));
-
-app.get("/", async (req, res) => { 
+ 
+app.get("/", (req, res) => {   
+    res.render("index.ejs"); 
+});  
+ 
+app.post("/choice", async (req, res) => {
     try {
-        const result = await axios.get("https://www.thesportsdb.com/api/v1/json/123/searchteams.php?t=Barcelona");
-        res.render("index.ejs", { content: JSON.stringify(result.data) });
-    } catch (error) {
-        console.log(error.response.data);
-        res.statusCode(500);
+        if (req.body.league) {
+            const result = await axios.get("https://www.thesportsdb.com/api/v1/json/123/lookuptable.php?l=" + req.body.league);
+            res.render("index.ejs", { standings: result.data.table });
+        } 
+
+        if (req.body.team) {
+            console.log(req.body.team);   
+        }
+    } catch (error) {  
+        console.log(error); 
     }
 });
  
-app.listen(port, () => {
+app.listen(port, () => { 
     console.log(`Running on port ${port}`);
 }); 

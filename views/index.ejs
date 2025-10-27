@@ -7,49 +7,67 @@
     <title>Football Tracking</title>
 </head>
 <body>
-    <div class="container">
+    <div class="container"> 
     <h1>Choose a League or Team</h1>
 
-    <form action="/" id="form" class="form" method="POST">
+    <form action="/choice" id="form" class="form" method="POST">
       <select name="league" id="league" class="form-select">
         <option value="" data-display="Select">Choose League</option> 
         <option value="4335">Spanish La Liga</option>
-        <option value="4480">UEFA Champions League</option>
+        <option value="4480">UEFA Champions League</option> 
         <option value="4429">FIFA World Cup</option> 
         <option value="4346">American Major League Soccer</option>
         <option value="4328">English Premier League</option>
         <option value="4331">German Bundesliga</option>  
         <option value="4332">Italian Serie A</option>
       </select>
-      <select name="team" id="team" class="form-select">
+      <select name="team" id="team" class="form-select"> 
         <option value="">Choose Team</option>
         <option value="133739">FC Barcelona</option>
         <option value="133664">Bayern Munich</option>
         <option value="137699">Inter Miami</option> 
         <option value="134509">Argentina</option>
         <option value="133909">Spain</option>
-      </select>
+      </select> 
       <button type="submit" class="form-submit">Go</button>
-    </form>
+    </form>  
     <section id="cards" class="cards">
-      <% if (locals.data) { %>
-      <article class="card-item">  
-        <h2 class="card-activity">
-          <%= data.activity %>
-        </h2>
-        <div class="card-info"> 
-          <span class="card-type">
-            <%= data.type %>
-          </span>  
-          <span class="card-participants">
-            Participants: <%= data.participants %>
-            <span class="card-number"></span>
-          </span>
-        </div>
-      </article>
+      <% if (locals.standings && locals.standings.length > 0) { %>
+        <table class="standings-table">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Team</th>
+              <th>Badge</th>
+              <th>Played</th>
+              <th>Points</th>
+              <th>Form</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% standings.forEach(team => { %>
+              <tr>
+                <td><%= team.intRank %></td>
+                <td><%= team.strTeam %></td>
+                <td><img src="<%= team.strBadge %>" width="40"></td>
+                <td><%= team.intPlayed %></td>
+                <td><%= team.intPoints %></td>
+                <td> 
+                  <% team.strForm.split('').reverse().forEach(letter => { %>
+                    <span class="form-letter <%= letter === 'W' ? 'win' : letter === 'D' ? 'draw' : 'loss' %>">
+                      <%= letter %>
+                    </span>
+                  <% }) %>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table> 
+      <% } else { %>
+        <p>No data available</p>
       <% } %>
-
     </section>
+
   </div> 
   <script>
     const leagueSelect = document.getElementById('league'); 
