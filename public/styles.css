@@ -230,3 +230,39 @@ caption {
 .form-letter.loss {
   background-color: #ff4d4d; /* red */
 }
+
+.team-section {
+  background-color: #121212;
+  color: #f4f4f4; 
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 500px;
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.team-section:hover {
+  transform: translateY(-5px);
+}
+
+.team-badge {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+}
+
+.team-name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.team-league,
+.team-stadium {
+  font-size: 1rem;
+  margin: 0.3rem 0;
+  color: #ccc;
+}

@@ -38,7 +38,7 @@
             <tr>
               <th>Rank</th>
               <th>Team</th>
-              <th>Badge</th>
+              <th>Badge</th> 
               <th>Played</th>
               <th>Points</th>
               <th>Form</th>
@@ -62,10 +62,12 @@
               </tr>
             <% }) %>
           </tbody>
-        </table> 
-      <% } else { %>
+        </table>  
+      <% } else if (locals.team) { %> 
+      <%console.log(locals.team);%>
+      <% } else { %> 
         <p>No data available</p>
-      <% } %>
+      <% } %> 
     </section>
 
   </div> 

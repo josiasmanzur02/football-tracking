@@ -15,12 +15,13 @@ app.get("/", (req, res) => {
 app.post("/choice", async (req, res) => {
     try {
         if (req.body.league) {
-            const result = await axios.get("https://www.thesportsdb.com/api/v1/json/123/lookuptable.php?l=" + req.body.league);
-            res.render("index.ejs", { standings: result.data.table });
+            const league = await axios.get("https://www.thesportsdb.com/api/v1/json/123/lookuptable.php?l=" + req.body.league);
+            res.render("index.ejs", { standings: league.data.table });
         } 
 
         if (req.body.team) {
-            console.log(req.body.team);   
+            const team = await axios.get("https://www.thesportsdb.com/api/v1/json/123/lookupteam.php?id=" + req.body.team);
+            res.render("index.ejs", { team: team.data.teams });
         }
     } catch (error) {  
         console.log(error); 
