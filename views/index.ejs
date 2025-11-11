@@ -8,14 +8,17 @@
 </head>
 <body>
     <div class="container"> 
-    <h1>Choose a League or Team</h1>
+    <h1>Choose a League or Team</h1> 
+    <% if (locals.error) { %>
+      <div class="alert alert-error">
+        <p><%= error %></p>
+      </div>
+    <% } %>
 
     <form action="/choice" id="form" class="form" method="POST">
       <select name="league" id="league" class="form-select">
         <option value="" data-display="Select">Choose League</option> 
         <option value="4335">Spanish La Liga</option>
-        <option value="4480">UEFA Champions League</option> 
-        <option value="4429">FIFA World Cup</option> 
         <option value="4346">American Major League Soccer</option>
         <option value="4328">English Premier League</option>
         <option value="4331">German Bundesliga</option>  
@@ -33,38 +36,100 @@
     </form>  
     <section id="cards" class="cards">
       <% if (locals.standings && locals.standings.length > 0) { %>
-        <table class="standings-table">
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Team</th>
-              <th>Badge</th> 
-              <th>Played</th>
-              <th>Points</th>
-              <th>Form</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% standings.forEach(team => { %>
+        <div class="table-wrapper">
+          <table class="standings-table">
+            <thead>
               <tr>
-                <td><%= team.intRank %></td>
-                <td><%= team.strTeam %></td>
-                <td><img src="<%= team.strBadge %>" width="40"></td>
-                <td><%= team.intPlayed %></td>
-                <td><%= team.intPoints %></td>
-                <td> 
-                  <% team.strForm.split('').reverse().forEach(letter => { %>
-                    <span class="form-letter <%= letter === 'W' ? 'win' : letter === 'D' ? 'draw' : 'loss' %>">
-                      <%= letter %>
-                    </span>
-                  <% }) %>
-                </td>
+                <th>Rank</th>
+                <th>Team</th>
+                <th>Badge</th> 
+                <th>Played</th>
+                <th>Points</th>
+                <th>Form</th> 
               </tr>
-            <% }) %>
-          </tbody>
-        </table>  
-      <% } else if (locals.team) { %> 
-      <%console.log(locals.team);%>
+            </thead>
+            <tbody>
+              <% standings.forEach(team => { %>
+                <tr>
+                  <td><%= team.intRank %></td>
+                  <td><%= team.strTeam %></td>
+                  <td><img src="<%= team.strBadge %>" width="40" alt="<%= team.strTeam %> badge"></td>
+                  <td><%= team.intPlayed %></td>
+                  <td><%= team.intPoints %></td>
+                  <td> 
+                    <% team.strForm.split('').reverse().forEach(letter => { %>
+                      <span class="form-letter <%= letter === 'W' ? 'win' : letter === 'D' ? 'draw' : 'loss' %>">
+                        <%= letter %>
+                      </span>
+                    <% }) %>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>  
+      <% } else if (locals.next || locals.previous) { %> 
+      <% const previousMatch = locals.previous; const nextMatch = locals.next; %>
+      <div class="recent-games">
+        <% if (previousMatch) { %>
+          <div class="game-card previous-game">
+            <p class="event-label">Previous Match</p>
+            <p class="event-date"><%= previousMatch.dateEvent || "Date TBD" %></p>
+            <p class="event-title"><%= previousMatch.strEvent %></p>
+            <div class="game-matchup">
+              <div class="team">
+                <% if (previousMatch.strHomeTeamBadge) { %>
+                  <img src="<%= previousMatch.strHomeTeamBadge %>" alt="<%= previousMatch.strHomeTeam %> badge">
+                <% } %>
+                <span><%= previousMatch.strHomeTeam %></span>
+              </div>
+              <div class="score-badge">
+                <span><%= previousMatch.intHomeScore ?? "-" %></span>
+                <span>-</span>
+                <span><%= previousMatch.intAwayScore ?? "-" %></span>
+              </div>
+              <div class="team">
+                <% if (previousMatch.strAwayTeamBadge) { %>
+                  <img src="<%= previousMatch.strAwayTeamBadge %>" alt="<%= previousMatch.strAwayTeam %> badge">
+                <% } %>
+                <span><%= previousMatch.strAwayTeam %></span>
+              </div>
+            </div>
+            <% if (previousMatch.strVenue) { %>
+              <p class="event-venue"><%= previousMatch.strVenue %></p>
+            <% } %>
+          </div> 
+        <% } %>
+        <% if (nextMatch) { %>
+          <div class="game-card next-game">
+            <p class="event-label">Next Match</p>
+            <p class="event-date"><%= nextMatch.dateEvent || "Date TBD" %> · <%= nextMatch.strTime || "Time TBD" %></p>
+            <p class="event-title"><%= nextMatch.strEvent %></p>
+            <div class="game-matchup">
+              <div class="team">
+                <% if (nextMatch.strHomeTeamBadge) { %>
+                  <img src="<%= nextMatch.strHomeTeamBadge %>" alt="<%= nextMatch.strHomeTeam %> badge">
+                <% } %>
+                <span><%= nextMatch.strHomeTeam %></span>
+              </div>
+              <div class="score-badge future">
+                <span><%= nextMatch.intHomeScore ?? "-" %></span>
+                <span>-</span>
+                <span><%= nextMatch.intAwayScore ?? "-" %></span>
+              </div>
+              <div class="team">
+                <% if (nextMatch.strAwayTeamBadge) { %>
+                  <img src="<%= nextMatch.strAwayTeamBadge %>" alt="<%= nextMatch.strAwayTeam %> badge">
+                <% } %>
+                <span><%= nextMatch.strAwayTeam %></span>
+              </div>
+            </div>
+            <% if (nextMatch.strVenue) { %>
+              <p class="event-venue"><%= nextMatch.strVenue %></p>
+            <% } %>
+          </div> 
+        <% } %>
+      </div>
       <% } else { %> 
         <p>No data available</p>
       <% } %> 
